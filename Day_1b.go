@@ -1,4 +1,6 @@
-package main
+//go:build day1b
+
+package b1
 
 import (
 	"bufio"
