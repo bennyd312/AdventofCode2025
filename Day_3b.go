@@ -4,11 +4,12 @@ package main
 
 import (
 	"bufio"
-	"os"
-	"log"
-	"strconv"
 	"fmt"
+	"log"
+	"math/big"
+	"os"
 )
+
 func getFile(path string) []string {
 	var data = []string{}
 
@@ -31,51 +32,51 @@ func getFile(path string) []string {
 	return data
 }
 
-func getJoltage(bank string) int {
-	current := string(bank[0])
-	size := len(bank)
-
-	for i:=0; i<3; i++{
-		for j:=0; j<size-1; j++ {
-			curr, _ := strconv.Atoi(bank[i])
-			next, _ := strconv.Atoi(bank[i+1])
-			if next == 0 {continue;}
-			if curr == 0 {continue;}
-			if curr == 1 { 
-				bank[i] = "0"
-				continue;
-		}
-			if curr < next {
-				bank[i] = "0"
-				continue;
-			} 
-		}
+func dropDigitGetMax(number string) string {
+	size := len(number)
+	nums := make([]string, 0, size)
+	for i := 0; i < size; i++ {
+		nums = append(nums, number[:i]+number[i+1:])
 	}
-	var output string
-	for i:=0; i<size; i++ {
-		if char:=string(bank[i]); char != "0" {
-			output += bank[i]
+
+	var idxLargest int
+	valueLargest := big.NewInt(0)
+
+	for i, n := range nums {
+		curr := new(big.Int)
+		curr.SetString(n, 10)
+		if curr.Cmp(valueLargest) > 0 {
+			valueLargest.Set(curr)
+			idxLargest = i
 		}
 	}
 
-	joltage, _ = strconv.Atoi(output)
+	return nums[idxLargest]
+}
+func getJoltage(bank string) *big.Int {
+	num := bank
+	for len(num) > 12 {
+		num = dropDigitGetMax(num)
+	}
 
-	return joltage
+	result := new(big.Int)
+	result.SetString(num, 10)
+	return result
 }
 
 func solver(path string) {
-	var maxJoltage int
+	total := big.NewInt(0)
 	data := getFile(path)
 	for _, v := range data {
-		maxJoltage += getJoltage(v)
+		total.Add(total, getJoltage(v))
 	}
 
-	fmt.Printf("For path %s the solution is %d.\n",path,maxJoltage)
+	fmt.Printf("For path %s the solution is %s.\n", path, total.String())
 }
 
 func main() {
-	var paths = []string{"3a_simple.txt"}
-	
+	var paths = []string{"3a_test.txt", "3a_simple.txt", "3a_input.txt"}
+
 	for _, path := range paths {
 		solver(path)
 	}
