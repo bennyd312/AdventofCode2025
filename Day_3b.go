@@ -1,6 +1,6 @@
 //go:build a3
 
-package main
+package a3
 
 import (
 	"bufio"
