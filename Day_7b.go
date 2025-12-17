@@ -1,6 +1,6 @@
 //go:build template
 
-package a7
+package b7
 
 import (
 	"bufio"
@@ -33,55 +33,61 @@ func loadInput(path string) (data []string) {
 	return data
 }
 
-func splitBeam(beams []bool, splitters string) (newBeams []bool, splitCounter int) {
+func splitBeam(beams []int, splitters string) (newBeams []int) {
 	size := len(beams)
 	for i := 0; i < size; i++ {
-		newBeams = append(newBeams, false)
+		newBeams = append(newBeams, 0)
 	}
 	for i, beam := range beams {
-		if splitters[i] == '^' && beam {
-			splitCounter++
+		if splitters[i] == '^' && beam != 0 {
 			if i == 0 {
-				newBeams[1] = true
+				newBeams[1] += beam
 			} else if i == size-1 {
-				newBeams[i-1] = true
+				newBeams[i-1] += beam
 			} else {
-				newBeams[i-1] = true
-				newBeams[i+1] = true
+				newBeams[i-1] += beam
+				newBeams[i+1] += beam
 			}
-		} else if beam {
-			newBeams[i] = true
+			newBeams[i] = 0
+		} else {
+			newBeams[i] += beam
 		}
 	}
 
-	return newBeams, splitCounter
+	return newBeams
 }
-func initializeBeams(beams string) (newBeams []bool) {
+func initializeBeams(beams string) (newBeams []int) {
 	for _, state := range beams {
 		if state == 'S' {
-			newBeams = append(newBeams, true)
+			newBeams = append(newBeams, 1)
 		} else {
-			newBeams = append(newBeams, false)
+			newBeams = append(newBeams, 0)
 		}
 	}
 	return newBeams
 }
 
+func sum(arr []int) (number int) {
+	for _, v := range arr {
+		number += v
+	}
+	return number
+}
+
 func solve(path string) {
-	var solution int
 	data := loadInput(path)
-	var beams []bool
+	var beams []int
 
 	for i, _ := range data {
 		if i == 0 {
 			beams = initializeBeams(data[i])
 		} else {
-			newBeams, splitCounter := splitBeam(beams, data[i])
-			solution += splitCounter
+			newBeams := splitBeam(beams, data[i])
 			beams = newBeams
 		}
 	}
-	fmt.Printf("For path %s the solution is %d.\n", path, solution)
+
+	fmt.Printf("For path %s the solution is %d.\n", path, sum(beams))
 }
 
 func main() {
