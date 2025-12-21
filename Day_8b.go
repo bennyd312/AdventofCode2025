@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type EdgeHeap []Edge
@@ -203,7 +204,10 @@ func main() {
 	var paths = []string{"8a_simple.txt", "8a_input.txt"}
 
 	for i := range paths {
+		start := time.Now()
 		solve(paths[i])
+		dt := time.Since(start)
+		fmt.Println(dt)
 	}
 
 }

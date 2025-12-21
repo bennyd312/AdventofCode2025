@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 func loadInput(path string) (data []string) {
@@ -92,9 +93,12 @@ func solve(path string) {
 
 func main() {
 	var paths = []string{"7a_simple.txt", "7a_input.txt"}
-
+	p := fmt.Println
 	for _, path := range paths {
+		start := time.Now()
 		solve(path)
+		diff := time.Since(start)
+		p(diff)
 	}
 
 }
