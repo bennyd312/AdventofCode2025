@@ -1,6 +1,6 @@
 //go:build template
 
-package main
+package b9
 
 import (
 	"bufio"
