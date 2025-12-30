@@ -4,15 +4,16 @@ package main
 
 import (
 	"bufio"
-	"os"
-	"log"
-	"strconv"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
 )
+
 func getFile(path string) []string {
 	var data = []string{}
 
-	file, err := os.Open(path)
+	file, err := os.Open("inputs/" + path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,24 +36,28 @@ func getJoltage(bank string) int {
 	var first int = 0
 	var split int = 0
 	var first_str string = "0"
-	for i:= 0; i<len(bank)-1; i++ {
+	for i := 0; i < len(bank)-1; i++ {
 		if current, _ := strconv.Atoi(string(bank[i])); first < current {
 			first = current
 			first_str = string(bank[i])
 			split = i
 		}
-		if first_str == "9" {break}
+		if first_str == "9" {
+			break
+		}
 	}
 	var second int = 0
 	var second_str string = string(bank[second])
-	for i:= split+1; i<len(bank); i++ {
+	for i := split + 1; i < len(bank); i++ {
 		if current, _ := strconv.Atoi(string(bank[i])); second < current {
 			second = current
 			second_str = string(bank[i])
 		}
-		if(second_str=="9"){break}
+		if second_str == "9" {
+			break
+		}
 	}
-	output, _ := strconv.Atoi(first_str+second_str)
+	output, _ := strconv.Atoi(first_str + second_str)
 	return output
 }
 
@@ -63,12 +68,12 @@ func solver(path string) {
 		maxJoltage += getJoltage(v)
 	}
 
-	fmt.Printf("For path %s the solution is %d.\n",path,maxJoltage)
+	fmt.Printf("For path %s the solution is %d.\n", path, maxJoltage)
 }
 
 func main() {
-	var paths = []string{"3a_simple.txt","3a_input.txt"}
-	
+	var paths = []string{"3a_simple.txt", "3a_input.txt"}
+
 	for _, path := range paths {
 		solver(path)
 	}

@@ -1,4 +1,6 @@
-package main
+//go:build b11
+
+package b11
 
 import (
 	"bufio"
@@ -10,7 +12,7 @@ import (
 
 func loadInput(path string) (data []string) {
 
-	file, err := os.Open(path)
+	file, err := os.Open("inputs/" + path)
 
 	if err != nil {
 		log.Fatal(err)

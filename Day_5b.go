@@ -20,7 +20,7 @@ func maxInt(x, y int) int {
 }
 
 func loadInput(path string) (data1 []string, data2 []string) {
-	file, err := os.Open(path)
+	file, err := os.Open("inputs/" + path)
 
 	if err != nil {
 		log.Fatal(err)
